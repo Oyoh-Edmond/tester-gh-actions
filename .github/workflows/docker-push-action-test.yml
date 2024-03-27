@@ -1,0 +1,22 @@
+name: Docker build and push image With Custom Actions
+
+on: [push]
+env:
+  image-name: nodeapp-gh
+  dockerfile-path: ./Dockerfile
+jobs:
+    build-push-image:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+
+        - name: Deploy to DockerHub
+          uses: Makinates/eddy-gh-actions@main
+          with:
+            DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+            DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+            dockerfile-path: ${{ env.dockerfile-path }}
+            image-name: ${{ env.image-name }}
+            image-tag: ${{ github.sha }}
+            
